@@ -9,27 +9,31 @@ This is a Multi-Agent AI Orchestration Framework that enables multiple Claude Co
 ## Recent Enhancements (v2 Workflows)
 
 ### Chat MCP Integration
+
 - **Real-time Coordination**: Agents communicate through chat rooms instead of fixed wait times
 - **Event-driven Execution**: Workflows respond to chat messages ([COMPLETED], [HANDOFF], etc.)
 - **Performance Gains**: 30-60% time reduction compared to traditional workflows
 
 ### Enhanced Workflows Now Available
+
 1. **`multi-agent-bug-fix-workflow-v2.md`**: Bug fixing with chat coordination
 2. **`multi-agent-feature-implementation-workflow-v2.md`**: TDD with real-time Red-Green-Refactor cycles
 3. **`multi-agent-bug-fix-workflow-v3.md`**: Advanced bug fixing with replication-first approach and confidence scoring
 
 ### Bilingual Support
+
 All documentation now available in English and Japanese (files with `_jp` suffix)
 
 ## Key Commands
 
 ### Installation and Setup
+
 ```bash
 # Install MCP components (from project directory after linking this repo)
 ./guide/mcp_add.sh
 
 # Install MCP components globally
-./guide/mcp_add_global.sh  
+./guide/mcp_add_global.sh
 
 # Install Claude commands (creates symlinks in ~/.claude/commands)
 ./guide/install_claude_commands.sh
@@ -39,6 +43,7 @@ All documentation now available in English and Japanese (files with `_jp` suffix
 ```
 
 ### Testing
+
 ```bash
 # Run benchmark tests
 cd benchmarks/token_usage_analysis
@@ -50,11 +55,13 @@ python test_fibonacci.py
 ### Core Components
 
 1. **MCP Integration**
+
    - `chat`: Agent communication via `agent-communication-mcp`
    - `ccm`: Claude Code Manager via `@mkxultra/claude-code-mcp`
    - Communication happens through a shared chat room
 
 2. **Agent Types**
+
    - **Investigation Agent** (Opus): Analyzes problems and proposes solutions
    - **Implementation Agent** (Sonnet): Executes code changes
    - **Review Agent** (Opus): Performs code review
@@ -72,6 +79,7 @@ python test_fibonacci.py
    - **Article Creation**: Multi-phase content generation with chat tracking
 
 ### Key Directories
+
 - `/`: Workflow markdown files and documentation
 - `/benchmarks/`: Performance testing and token usage analysis
   - `token_usage_analysis/`: Model comparison results and methodology
@@ -84,7 +92,9 @@ python test_fibonacci.py
 ### Workflow Categories
 
 #### Chat-Enhanced Workflows (Recommended)
+
 These workflows use real-time chat coordination for improved efficiency:
+
 - `multi-agent-bug-fix-workflow-v2.md` - Bug fixing with 30-50% time reduction
 - `multi-agent-bug-fix-workflow-v3.md` - Advanced bug fixing with replication, verification, and confidence scoring
 - `multi-agent-feature-implementation-workflow-v2.md` - TDD implementation with event-driven cycles
@@ -95,12 +105,16 @@ These workflows use real-time chat coordination for improved efficiency:
 - `refactoring-workflow-v5-template.md` - Template-based refactoring
 
 #### Traditional Workflows (File-based)
+
 These use file-based coordination with fixed wait times:
+
 - `multi-agent-bug-fix-workflow.md` - Original bug fix workflow
 - `multi-agent-feature-implementation-workflow.md` - Original TDD workflow
 
 ### Executing Workflows
+
 Always reference workflows using the `@guide/` prefix:
+
 ```
 # Recommended: Chat-enhanced workflows
 @guide/multi-agent-bug-fix-workflow-v2.md Fix the authentication bug
@@ -112,7 +126,9 @@ Always reference workflows using the `@guide/` prefix:
 ```
 
 ### Workflow Deliverables
+
 Workflows produce standardized deliverables:
+
 - `bug-investigation-report.md`
 - `code-review-report.md`
 - `implementation-plan.md`
@@ -120,7 +136,9 @@ Workflows produce standardized deliverables:
 - Various specialist reports
 
 ### Chat Message Patterns
+
 For chat-enabled workflows, use these standard formats:
+
 ```
 [STARTED] Workflow initiated
 [PROGRESS] Working on [task]
@@ -137,18 +155,23 @@ For chat-enabled workflows, use these standard formats:
 ### Cost Optimization
 
 #### Foundation Session Strategy
+
 The framework uses "foundation sessions" for 85%+ token cost reduction:
+
 - First agent loads full context (expensive)
 - Subsequent agents reuse cached context (cheap)
 - Always spawn agents from the coordinator session
 
 #### Model Selection for Cost Efficiency
+
 Based on benchmark analysis (`benchmarks/token_usage_analysis/`):
+
 - **Haiku**: $0.029 per task - fastest (27s), best for simple tasks
 - **Sonnet**: $0.179 per task - balanced, most detailed output
 - **Opus**: $0.582 per task - highest quality, complex analysis
 
 #### Time Savings with Chat Coordination
+
 - Bug Fix v2: 30-50% reduction vs traditional
 - Feature Implementation v2: 40-60% reduction
 - Investigation: Up to 70% reduction with parallel agents
@@ -158,6 +181,7 @@ Based on benchmark analysis (`benchmarks/token_usage_analysis/`):
 ### Agent Communication
 
 #### Chat MCP Integration (for v2 workflows)
+
 - Agents join chat rooms with standardized names: `bugfix-[timestamp]`, `tdd-feature-[timestamp]`
 - Use natural language for chat instructions (see `chat-mcp-prompt-guide.md`)
 - Standard message formats:
@@ -173,17 +197,20 @@ Based on benchmark analysis (`benchmarks/token_usage_analysis/`):
 - No fixed wait times - purely event-driven
 
 #### Traditional Communication
+
 - Use `mcp__chat__post_message` for inter-agent communication
 - Check chat history with `mcp__chat__list_messages`
 - Wait for agent completion before proceeding
 
 ### Agent Management
+
 - Spawn agents with appropriate models (Opus for analysis, Sonnet for implementation)
 - Use `--prompt-caching` flag for cost efficiency
 - Include `--resume $USER_DIR` for workspace consistency
 - Monitor agent status with `mcp__ccm__get_all_instance_statuses`
 
 ### Error Handling
+
 - Always check MCP availability before starting workflows
 - Verify agent spawning success
 - Use Debug Agent when errors occur
@@ -192,12 +219,15 @@ Based on benchmark analysis (`benchmarks/token_usage_analysis/`):
 ### Language Support
 
 #### Bilingual Documentation
+
 Most documentation is available in both English and Japanese:
+
 - Workflows: Add `_jp` suffix for Japanese versions
 - Guides: `chat-mcp-prompt-guide.md` / `chat-mcp-prompt-guide_jp.md`
 - Commands and benchmarks also have bilingual versions
 
 #### Available Japanese Workflows
+
 - `multi-agent-bug-fix-workflow_jp.md`
 - `multi-agent-investigation-workflow_jp.md`
 - `multi-agent-feature-implementation-workflow_jp.md`
@@ -211,3 +241,6 @@ Most documentation is available in both English and Japanese:
 5. **Model selection matters** - Opus for quality, Sonnet for efficiency, Haiku for speed/cost
 6. **Use coordinator wait strategies** - See `coordinator-wait-strategies.md` for optimal patterns
 7. **Monitor chat for real-time coordination** - Event-driven is superior to polling
+8. **Foundation sessions are critical** - First agent establishes context, subsequent agents reuse for 85%+ cost savings
+9. **Workflow execution pattern**: Always use `@guide/` prefix when referencing workflows
+10. **No traditional build system** - This is a methodology repository; link as `guide` directory in target projects
